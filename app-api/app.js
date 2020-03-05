@@ -31,7 +31,7 @@ async function main() {
     console.log(getInfoTerms.assets);
    
 
-    await doc.loadInfo()
+    await doc.loadInfo();
 
     const sheet = doc.sheetsById[0];
 
