@@ -2,15 +2,16 @@ const readline = require('readline-sync');
 
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 
-const credentials = require('./credentials.json'); //Your credential archive api
+const credentials = require('./credential/credentials');//Your credential archive api
 
+const GetId = require('../src/utils/GenerateKeyId');
 
 async function main() {
-    const doc = new GoogleSpreadsheet('YOUR ID SHEET');
+    const doc = new GoogleSpreadsheet('1t6RgVQx8uUpcTqAr6-T1mdMJYmZTwbSdK0WqFkYP6rY');
 
     await doc.useServiceAccountAuth({
-        client_email: credentials.env.client_email,
-        private_key: credentials.env.private_key
+        client_email: credentials.client_email,
+        private_key: credentials.private_key
     });
 
     const getInfoTerms = {};
@@ -35,16 +36,21 @@ async function main() {
 
     const sheet = doc.sheetsById[0];
 
-    const moreRows = await sheet.addRows([
-         {   
-            name: getInfoTerms.assets.user_name, 
-            email: getInfoTerms.assets.user_email
-        },
-    ]);
+    const rowsCell = await sheet.getRows();
 
+       
+        const moreRows = await sheet.addRows([
+            {  
+                ID: await GetId(),
+                NAME: getInfoTerms.assets.user_name, 
+                EMAIL: getInfoTerms.assets.user_email
+            },
+            
+        ]);
+
+    
 }
 main();
-
 
 
 
