@@ -1,10 +1,5 @@
-const readline = require('readline-sync');
-
 const { GoogleSpreadsheet } = require('google-spreadsheet');
-
 const credentials = require('./credential/credentials');//Your credential archive api
-
-const GetId = require('../src/utils/GenerateKeyId');
 
 async function main() {
     const doc = new GoogleSpreadsheet('1t6RgVQx8uUpcTqAr6-T1mdMJYmZTwbSdK0WqFkYP6rY');
@@ -14,22 +9,10 @@ async function main() {
         private_key: credentials.private_key
     });
 
-    const getInfoTerms = {};
-
-    async function addSearchTerm()
-    {
-        const Terms = {
-            user_name: await readline.question(" insert name complet: "),
-            user_email: await readline.question(" insert your email: ")
-
-        }
-
-        return Terms
-    }
-
-     getInfoTerms.assets = await addSearchTerm();
-
-    console.log(getInfoTerms.assets);
+    const getInfoTerms = {
+        user_name: "Felipe Melo",
+        user_email: "felps@gmail.com"
+    };
    
 
     await doc.loadInfo();
@@ -41,14 +24,12 @@ async function main() {
        
         const moreRows = await sheet.addRows([
             {  
-                ID: await GetId(),
-                NAME: getInfoTerms.assets.user_name, 
-                EMAIL: getInfoTerms.assets.user_email
+                NAME: getInfoTerms.user_name, 
+                EMAIL: getInfoTerms.user_email
             },
             
         ]);
-
-    
+ 
 }
 main();
 
