@@ -1,37 +1,56 @@
-const { GoogleSpreadsheet } = require('google-spreadsheet');
-const credentials = require('./credential/credentials');//Your credential archive api
+const crypto = require('crypto');
+const doc = require('../data/SheetsAPI');
 
-async function main() {
-    const doc = new GoogleSpreadsheet('1t6RgVQx8uUpcTqAr6-T1mdMJYmZTwbSdK0WqFkYP6rY');
+    doc().then(function (callback)
+    {
+        const GetDoc = callback;
 
-    await doc.useServiceAccountAuth({
-        client_email: credentials.client_email,
-        private_key: credentials.private_key
+        async function create(){
+            const data_machine = {
+                nome_empresa: "ADOMÉNIO",
+                nome_maquina: "Optilex 330",
+                placa_mae: "ASUS DELL 330",
+                processador: "Dual Core 2.20 GHz",
+                fonte: "Sim",
+                mem_ram: "Não acompanha",
+                dvd_leitor: "Não",
+                hd_disc: "Não",
+                status: "Não completo",
+                data: "14/02/2020",
+                desc_maquina: "peças em falta, porém, todas funcionando" 
+            };
+    
+            const cod_id = crypto.randomBytes(4).toString('HEX');
+    
+        
+            const sheet = GetDoc.sheetsById[0];
+            
+            const rowsCell = await sheet.getRows();
+            
+            const moreRows = await sheet.addRows([
+                {  
+                    Cod_Serie: cod_id,  
+                    Empresa: data_machine.nome_empresa,
+                    Maquina: data_machine.nome_maquina,
+                    Motherboard: data_machine.placa_mae,
+                    Processador: data_machine.processador,
+                    Ram: data_machine.mem_ram,
+                    Fonte: data_machine.fonte,
+                    HD: data_machine.hd_disc,
+                    Data: data_machine.data,
+                    Status: data_machine.status,
+                    Obs: data_machine.desc_maquina
+                },
+                
+            ]);
+            
+            console.log("done!");
+        }
+        create()
     });
 
-    const getInfoTerms = {
-        user_name: "Felipe Melo",
-        user_email: "felps@gmail.com"
-    };
-   
-
-    await doc.loadInfo();
-
-    const sheet = doc.sheetsById[0];
-
-    const rowsCell = await sheet.getRows();
-
-       
-        const moreRows = await sheet.addRows([
-            {  
-                NAME: getInfoTerms.user_name, 
-                EMAIL: getInfoTerms.user_email
-            },
-            
-        ]);
  
-}
-main();
+
 
 
 
