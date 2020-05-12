@@ -4,6 +4,7 @@ const DataController = require('./controllers/DataController')
 
 const routes = express.Router();
 
-routes.post('/insert', DataController.index);
+routes.get('/insert', DataController.index);
+routes.post('/insert', DataController.create);
 
 module.exports = routes;
